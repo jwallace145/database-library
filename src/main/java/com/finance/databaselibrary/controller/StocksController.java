@@ -37,4 +37,9 @@ public class StocksController {
         this.repository.save(stock);
         return stock;
     }
+
+    @RequestMapping(value = "/drop/all", method = RequestMethod.DELETE)
+    public void deleteStocks() {
+        this.repository.deleteAll();
+    }
 }
