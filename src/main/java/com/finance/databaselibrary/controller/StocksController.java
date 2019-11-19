@@ -13,6 +13,8 @@ import java.util.List;
 @RequestMapping("/stocks")
 public class StocksController {
 
+    // this is a git intellij test
+
     @Autowired
     private StocksRepository repository;
 
