@@ -4,6 +4,10 @@ import com.finance.databaselibrary.model.Stock;
 import com.finance.databaselibrary.repository.StocksRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,7 +17,8 @@ import java.util.List;
 @RequestMapping("/stocks")
 public class StocksController {
 
-    // this is a git intellij test
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     private StocksRepository repository;
@@ -31,6 +36,14 @@ public class StocksController {
     @RequestMapping(value = "/{symbol}", method = RequestMethod.GET)
     public List<Stock> getStocks(@PathVariable("symbol") String symbol) {
         return this.repository.findBySymbol(symbol);
+    }
+
+    @RequestMapping(value = "/{symbol}/sort", method = RequestMethod.GET)
+    public List<Stock> getSortedStocks(@PathVariable("symbol") String symbol) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("symbol").is(symbol));
+        query.with(new Sort(Sort.Direction.ASC, "timestamp"));
+        return this.mongoTemplate.find(query, Stock.class);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
