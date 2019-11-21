@@ -4,15 +4,18 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "stocks")
 public class Stock {
 
     @Id
-    public ObjectId _id;
+    private ObjectId _id;
 
     private String symbol;
 
-    private String timestamp;
+    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date timestamp;
 
     private float open;
 
@@ -24,7 +27,7 @@ public class Stock {
 
     private int volume;
 
-    public Stock(ObjectId _id, String symbol, String timestamp, float open, float high, float low, float close, int volume) {
+    public Stock(ObjectId _id, String symbol, Date timestamp, float open, float high, float low, float close, int volume) {
         this._id = _id;
         this.symbol = symbol;
         this.timestamp = timestamp;
@@ -51,11 +54,11 @@ public class Stock {
         this.symbol = symbol;
     }
 
-    public String getTimestamp() {
+    public Date getTimestamp() {
         return this.timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
