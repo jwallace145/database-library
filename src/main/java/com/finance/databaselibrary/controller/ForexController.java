@@ -21,21 +21,26 @@ public class ForexController {
         return "{ \"status\" : \"healthy\" }";
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Forex> getAllForex() {
-        return this.forexRepository.findAll();
-    }
-
     @RequestMapping(value = "/{fromCurrencySymbol}/{toCurrencySymbol}", method = RequestMethod.GET)
     public List<Forex> getForex(@PathVariable("fromCurrencySymbol") String fromCurrencySymbol,
                                 @PathVariable("toCurrencySymbol") String toCurrencySymbol) {
         return this.forexRepository.findByFromCurrencySymbolAndToCurrencySymbol(fromCurrencySymbol, toCurrencySymbol);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Forex createForex(@Valid @RequestBody Forex forex) {
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public List<Forex> getAllForex() {
+        return this.forexRepository.findAll();
+    }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public Forex insertForex(@Valid @RequestBody Forex forex) {
         forex.set_id(ObjectId.get());
         this.forexRepository.save(forex);
         return forex;
+    }
+
+    @RequestMapping(value = "/drop", method = RequestMethod.DELETE)
+    public void dropAllForex() {
+        this.forexRepository.deleteAll();
     }
 }

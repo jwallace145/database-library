@@ -21,25 +21,25 @@ public class CryptocurrencyController {
         return "{ \"status\": \"healthy\" }";
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Cryptocurrency> getAllCryptos() {
-        return this.repository.findAll();
-    }
-
     @RequestMapping(value = "/{symbol}", method = RequestMethod.GET)
     public List<Cryptocurrency> getCryptos(@PathVariable("symbol") String symbol) {
         return this.repository.findBySymbol(symbol);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Cryptocurrency createCrypto(@Valid @RequestBody Cryptocurrency cryptocurrency) {
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public List<Cryptocurrency> getAllCryptos() {
+        return this.repository.findAll();
+    }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public Cryptocurrency insertCrypto(@Valid @RequestBody Cryptocurrency cryptocurrency) {
         cryptocurrency.set_id(ObjectId.get());
         this.repository.save(cryptocurrency);
         return cryptocurrency;
     }
 
     @RequestMapping(value = "/drop", method = RequestMethod.DELETE)
-    public void dropCryptos() {
+    public void dropAllCryptos() {
         this.repository.deleteAll();
     }
 }

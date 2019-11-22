@@ -31,17 +31,17 @@ public class StocksController {
         return "{ \"status\" : \"healthy\" }";
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Stock> getAllStocks() {
-        return this.repository.findAll();
-    }
-
     @RequestMapping(value = "/{symbol}", method = RequestMethod.GET)
     public List<Stock> getStocks(@PathVariable("symbol") String symbol) {
         return this.repository.findBySymbol(symbol);
     }
 
-    @RequestMapping(value = "/{symbol}/sort", method = RequestMethod.GET)
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public List<Stock> getAllStocks() {
+        return this.repository.findAll();
+    }
+
+    @RequestMapping(value = "/{symbol}/sorted", method = RequestMethod.GET)
     public List<Stock> getSortedStocks(@PathVariable("symbol") String symbol) {
         Query query = new Query();
         query.addCriteria(Criteria.where("symbol").is(symbol));
@@ -65,14 +65,14 @@ public class StocksController {
         return this.mongoTemplate.find(query, Stock.class);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Stock createStock(@Valid @RequestBody Stock stock) {
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public Stock insertStock(@Valid @RequestBody Stock stock) {
         stock.set_id(ObjectId.get());
         this.repository.save(stock);
         return stock;
     }
 
-    @RequestMapping(value = "/drop/all", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/drop", method = RequestMethod.DELETE)
     public void deleteStocks() {
         this.repository.deleteAll();
     }
