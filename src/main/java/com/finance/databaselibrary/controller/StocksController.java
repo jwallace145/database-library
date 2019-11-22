@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -42,6 +45,22 @@ public class StocksController {
     public List<Stock> getSortedStocks(@PathVariable("symbol") String symbol) {
         Query query = new Query();
         query.addCriteria(Criteria.where("symbol").is(symbol));
+        query.with(new Sort(Sort.Direction.ASC, "timestamp"));
+        return this.mongoTemplate.find(query, Stock.class);
+    }
+
+    @RequestMapping(value = "/sort/{startDateStr}/{endDateStr}/{symbol}", method = RequestMethod.GET)
+    public List<Stock> getSortedStocksOverTime(
+            @PathVariable("startDateStr") String startDateStr,
+            @PathVariable("endDateStr") String endDateStr,
+            @PathVariable("symbol") String symbol) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        Date startDate = format.parse(startDateStr);
+        Date endDate = format.parse(endDateStr);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("symbol").is(symbol));
+        query.addCriteria(new Criteria().andOperator(Criteria.where("timestamp").gte(startDate), Criteria.where("timestamp").lte(endDate)));
         query.with(new Sort(Sort.Direction.ASC, "timestamp"));
         return this.mongoTemplate.find(query, Stock.class);
     }
