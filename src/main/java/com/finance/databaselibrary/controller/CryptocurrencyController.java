@@ -37,4 +37,9 @@ public class CryptocurrencyController {
         this.repository.save(cryptocurrency);
         return cryptocurrency;
     }
+
+    @RequestMapping(value = "/drop", method = RequestMethod.DELETE)
+    public void dropCryptos() {
+        this.repository.deleteAll();
+    }
 }

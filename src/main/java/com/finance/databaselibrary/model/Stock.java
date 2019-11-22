@@ -14,7 +14,6 @@ public class Stock {
 
     private String symbol;
 
-    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date timestamp;
 
     private float open;

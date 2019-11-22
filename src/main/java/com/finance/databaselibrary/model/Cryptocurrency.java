@@ -4,6 +4,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "cryptos")
 public class Cryptocurrency {
 
@@ -12,7 +14,7 @@ public class Cryptocurrency {
 
     private String symbol;
 
-    private String timestamp;
+    private Date timestamp;
 
     private float open;
 
@@ -26,7 +28,7 @@ public class Cryptocurrency {
 
     private float marketCap;
 
-    public Cryptocurrency(ObjectId _id, String symbol, String timestamp, float open, float high, float low, float close, float volume, float marketCap) {
+    public Cryptocurrency(ObjectId _id, String symbol, Date timestamp, float open, float high, float low, float close, float volume, float marketCap) {
         this._id = _id;
         this.symbol = symbol;
         this.timestamp = timestamp;
@@ -54,11 +56,11 @@ public class Cryptocurrency {
         this.symbol = symbol;
     }
 
-    public String getTimestamp() {
+    public Date getTimestamp() {
         return this.timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
