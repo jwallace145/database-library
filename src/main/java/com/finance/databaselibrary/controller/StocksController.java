@@ -1,6 +1,7 @@
 package com.finance.databaselibrary.controller;
 
 import com.finance.databaselibrary.model.Stock;
+import com.finance.databaselibrary.model.StockTest;
 import com.finance.databaselibrary.repository.StocksRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,14 @@ public class StocksController {
     }
 
     @RequestMapping(value = "/{symbol}/sorted", method = RequestMethod.GET)
-    public List<Stock> getSortedStocks(@PathVariable("symbol") String symbol) {
+    public List<StockTest> getSortedStocks(@PathVariable("symbol") String symbol) {
         Query query = new Query();
         query.addCriteria(Criteria.where("symbol").is(symbol));
+        query.fields().include("timestamp");
+        query.fields().include("open");
+        query.fields().include("close");
         query.with(new Sort(Sort.Direction.ASC, "timestamp"));
-        return this.mongoTemplate.find(query, Stock.class);
+        return this.mongoTemplate.find(query, StockTest.class);
     }
 
     @RequestMapping(value = "/sort/{startDateStr}/{endDateStr}/{symbol}", method = RequestMethod.GET)
